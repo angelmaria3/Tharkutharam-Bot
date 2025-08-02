@@ -72,12 +72,12 @@ Diagrams:
 
 
 Project Demo
-Video
+https://drive.google.com/file/d/1p5gicNrW7Un6b1-9kYrSk4SE5lY6YYXz/view?usp=sharing
 
 
 Additional Demos
 https://v0-deploy-to-vercel-nu-liart.vercel.app/
 
 Team Contributions
-Angel Maria Sunil: 
-Sara Nisam: [Specific contributions]
+Angel Maria Sunil:[JOINT CONTRIBUTION IN PROMPT ENGINEERING AND FRONTEND DEVELOPMENT] 
+Sara Nisam: [JOINT CONTRIBUTION IN PROMPT ENGINEERING AND FRONTEND DEVELOPMENT ]
