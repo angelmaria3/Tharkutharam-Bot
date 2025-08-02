@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>തർക്കുത്തരം BOT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Noto+Sans+Malayalam:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- MODERN DARK THEME --- */
+        body {
+            background-color: #0A0A0A;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .chat-container {
+            background-color: #111827;
+            /* Dark charcoal background */
+            /* Subtle blue radial glow at the top */
+            background-image: radial-gradient(ellipse at top, rgba(56, 189, 248, 0.15), transparent 60%);
+        }
+
+        .font-malayalam {
+            font-family: 'Noto Sans Malayalam', sans-serif;
+        }
+
+        /* --- Custom Placeholders --- */
+        #message-input::placeholder {
+            font-family: 'Poppins', sans-serif;
+            color: #4B5563;
+            /* Muted Gray */
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        /* --- Send Button Glow Effect --- */
+        @keyframes button-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 8px #38bdf8;
+            }
+
+            50% {
+                box-shadow: 0 0 16px #38bdf8;
+            }
+        }
+
+        .send-button:hover {
+            animation: button-glow 1.5s infinite;
+        }
+
+        /* --- Chat Bubble Fade-in Animation --- */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-bubble {
+            animation: fade-in 0.5s ease-out forwards;
+        }
+
+        /* --- Custom Scrollbar --- */
+        #chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #chat-messages::-webkit-scrollbar-thumb {
+            background-color: #374151;
+            border-radius: 20px;
+        }
+
+        /* --- Custom Dropdown Styling --- */
+        .custom-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2338bdf8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: right .5rem top 50%;
+            background-size: .5rem auto;
+        }
+
+        .custom-select option {
+            background-color: #1F2937;
+            color: #E5E7EB;
+        }
+    </style>
+</head>
+
+<body class="overflow-hidden h-screen flex items-center justify-center p-2 sm:p-4">
+
+    <div class="chat-container w-full max-w-2xl h-full rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-700/50"
+        style="position: relative;">
+
+        <!-- Header -->
+        <header class="text-white p-3 text-center z-30 flex justify-between items-center bg-transparent">
+            <div class="w-1/4 flex justify-start pl-2">
+                <select id="language-selector" onchange="changeLanguage(this.value)"
+                    class="custom-select bg-gray-800/50 text-gray-300 border border-gray-700 rounded-md p-1 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 w-auto">
+                    <option value="Malayalam">Malayalam</option>
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Tamil">Tamil</option>
+                </select>
+            </div>
+            <h1 id="bot-title" class="text-xl font-semibold tracking-wide text-gray-200 w-1/2">
+                <span class="font-malayalam font-bold">തർക്കുത്തരം</span> BOT
+            </h1>
+            <div class="w-1/4 flex justify-end pr-2">
+                <a href="https://v0-bubble-wrap-woad.vercel.app/" id="game-link"
+                    class="bg-sky-600 text-white font-malayalam text-sm font-bold px-3 py-1 rounded-md shadow-lg hover:bg-sky-500 transition-all duration-300">കേറി
+                    വാടാ മക്കളെ</a>
+            </div>
+        </header>
+
+        <!-- Chat Messages -->
+        <main id="chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4"
+            style="background-color: transparent;">
+            <div class="chat-content space-y-4">
+                <!-- Chat messages will be appended here -->
+            </div>
+        </main>
+
+        <!-- Message Input -->
+        <footer class="p-3 z-30 bg-transparent">
+            <div class="flex items-center bg-gray-900/50 rounded-full p-2 shadow-inner border border-gray-700/80">
+                <input type="text" id="message-input" placeholder="എന്തേലും പറയെടാ..."
+                    class="flex-1 bg-transparent border-none focus:ring-0 outline-none px-4 text-gray-200 text-base">
+                <button id="send-button"
+                    class="send-button bg-sky-600 rounded-full p-3 transition-colors duration-200 ease-in-out hover:bg-sky-500 focus:outline-none flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white transform rotate-90" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const chatContainer = document.querySelector('#chat-messages .chat-content');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const chatScroller = document.getElementById('chat-messages');
+        const botTitle = document.getElementById('bot-title');
+
+        let currentLanguage = 'Malayalam';
+        let chatHistory = [];
+
+        const placeholders = {
+            'Malayalam': 'എന്തേലും പറയെടാ...',
+            'English': 'Go on, say something...',
+            'Hindi': 'Kuch bol na...',
+            'Tamil': 'Ethavathu pesu da...'
+        };
+
+        const titles = {
+            'Malayalam': `<span class="font-malayalam font-bold">തർക്കുത്തരം</span> BOT`,
+            'English': `Tharkutharam BOT`,
+            'Hindi': `Tharkutharam BOT`,
+            'Tamil': `Tharkutharam BOT`
+        };
+
+        const loadingMessages = {
+            'Malayalam': 'Aradhakare shantharakuvin...',
+            'English': 'Hold your horses...',
+            'Hindi': 'Ruko zara...',
+            'Tamil': 'Konjam porumaya iru...'
+        };
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            messageInput.placeholder = placeholders[lang];
+            botTitle.innerHTML = titles[lang];
+            chatHistory = [];
+            chatContainer.innerHTML = '';
+            console.log(`Language changed to: ${currentLanguage}`);
+        }
+
+        function displayMessage(content, sender) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = `flex items-end ${sender === 'user' ? 'justify-end' : ''} message-bubble`;
+
+            const messageBubble = `
+                <div class="${sender === 'user' ? 'bg-gray-700' : 'bg-sky-600'} text-white p-3 rounded-2xl ${sender === 'user' ? 'rounded-br-none' : 'rounded-bl-none'} max-w-xs sm:max-w-sm shadow-lg">
+                    <p class="text-base">${content}</p>
+                </div>`;
+
+            const avatar = '';
+
+            messageWrapper.innerHTML = sender === 'user' ? messageBubble : avatar + messageBubble;
+
+            chatContainer.appendChild(messageWrapper);
+            chatScroller.scrollTop = chatScroller.scrollHeight;
+        }
+
+        async function handleSend() {
+            const userText = messageInput.value.trim();
+            if (userText === '') return;
+
+            displayMessage(userText, 'user');
+            messageInput.value = '';
+
+            chatHistory.push({ role: "user", parts: [{ text: userText }] });
+
+            const thinkingId = `thinking-${Date.now()}`;
+            const loadingText = loadingMessages[currentLanguage];
+            const thinkingMessage = `<div id="${thinkingId}" class="flex items-end">
+                <div class="bg-sky-600 text-white p-3 rounded-2xl rounded-bl-none max-w-xs shadow-lg">
+                    <p class="text-base animate-pulse">${loadingText}</p>
+                </div>
+            </div>`;
+            chatContainer.insertAdjacentHTML('beforeend', thinkingMessage);
+            chatScroller.scrollTop = chatScroller.scrollHeight;
+
+            await callGeminiAPI(userText);
+
+            document.getElementById(thinkingId)?.remove();
+        }
+
+        async function callGeminiAPI(userText) {
+            const apiKey = "AIzaSyAUBaZq1LgvMPeL7MQpZkpGUiiayUV8YeQ"; // Leave blank
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `You are Tharkutharam Bot. Your personality is witty, sarcastic, and you love roasting people playfully. You must reply in the same language the user uses (${currentLanguage}). Your replies must be short, punchy, savage but never cruel, and full of attitude, like a meme page admin. Use famous movie dialogues from ${currentLanguage} cinema where appropriate. Never break character.`;
+
+            const contents = [
+                { role: "user", parts: [{ text: systemPrompt }] },
+                { role: "model", parts: [{ text: "Got it. I am Tharkutharam Bot. Let's do this." }] },
+                ...chatHistory
+            ];
+
+            const payload = { contents };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+                const result = await response.json();
+
+                let botResponse = "Enthonnadey... Mindunnilla.";
+                if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts[0]) {
+                    botResponse = result.candidates[0].content.parts[0].text;
+                }
+
+                displayMessage(botResponse, 'bot');
+                chatHistory.push({ role: "model", parts: [{ text: botResponse }] });
+
+            } catch (error) {
+                console.error("Gemini API call failed:", error);
+                displayMessage("Server-il oru cheriya pashak. Try again later.", 'bot');
+            }
+        }
+
+        sendButton.addEventListener('click', handleSend);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+        changeLanguage('Malayalam');
+    </script>
+</body>
+
+</html>
