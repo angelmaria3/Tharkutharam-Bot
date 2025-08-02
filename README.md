@@ -73,7 +73,7 @@ Diagrams:
 
 Project Demo
 https://drive.google.com/file/d/1p5gicNrW7Un6b1-9kYrSk4SE5lY6YYXz/view?usp=sharing
-
+The complete video of our tharkutharambot explaining all features in detail.a must watch.
 
 Additional Demos
 https://v0-deploy-to-vercel-nu-liart.vercel.app/
