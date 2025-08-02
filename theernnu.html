@@ -237,8 +237,8 @@
         }
 
         async function callGeminiAPI(userText) {
-            const apiKey = "AIzaSyAUBaZq1LgvMPeL7MQpZkpGUiiayUV8YeQ"; // Leave blank
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const apiKey = "YOUR-API-KEY"; // Leave blank
+            
 
             const systemPrompt = `You are Tharkutharam Bot. Your personality is witty, sarcastic, and you love roasting people playfully. You must reply in the same language the user uses (${currentLanguage}). Your replies must be short, punchy, savage but never cruel, and full of attitude, like a meme page admin. Use famous movie dialogues from ${currentLanguage} cinema where appropriate. Never break character.`;
 
@@ -283,5 +283,6 @@
         changeLanguage('Malayalam');
     </script>
 </body>
+
 
 </html>
